@@ -3,11 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		296DB3FB26A8592500BFDEA0 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296DB3FA26A8592500BFDEA0 /* main.swift */; };
+		296DB40426A85AF700BFDEA0 /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 296DB40326A85AF700BFDEA0 /* CryptoSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -32,6 +33,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				296DB40426A85AF700BFDEA0 /* CryptoSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +80,9 @@
 			dependencies = (
 			);
 			name = BrickLinkScripting;
+			packageProductDependencies = (
+				296DB40326A85AF700BFDEA0 /* CryptoSwift */,
+			);
 			productName = BrickLinkScripting;
 			productReference = 296DB3F726A8592500BFDEA0 /* BrickLinkScripting */;
 			productType = "com.apple.product-type.tool";
@@ -105,6 +110,9 @@
 				Base,
 			);
 			mainGroup = 296DB3EE26A8592500BFDEA0;
+			packageReferences = (
+				296DB40226A85AF700BFDEA0 /* XCRemoteSwiftPackageReference "CryptoSwift" */,
+			);
 			productRefGroup = 296DB3F826A8592500BFDEA0 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -285,6 +293,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		296DB40226A85AF700BFDEA0 /* XCRemoteSwiftPackageReference "CryptoSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/krzyzanowskim/CryptoSwift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.4.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		296DB40326A85AF700BFDEA0 /* CryptoSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 296DB40226A85AF700BFDEA0 /* XCRemoteSwiftPackageReference "CryptoSwift" */;
+			productName = CryptoSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 296DB3EF26A8592500BFDEA0 /* Project object */;
 }
