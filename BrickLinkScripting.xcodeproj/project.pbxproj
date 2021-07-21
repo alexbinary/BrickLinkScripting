@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		296DB3FB26A8592500BFDEA0 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296DB3FA26A8592500BFDEA0 /* main.swift */; };
 		296DB40426A85AF700BFDEA0 /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 296DB40326A85AF700BFDEA0 /* CryptoSwift */; };
+		296DB40826A85CB300BFDEA0 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296DB40726A85CB300BFDEA0 /* Models.swift */; };
+		296DB40C26A85CDF00BFDEA0 /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296DB40B26A85CDF00BFDEA0 /* Auth.swift */; };
+		296DB40F26A85D9000BFDEA0 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296DB40E26A85D9000BFDEA0 /* Utils.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -26,6 +29,9 @@
 /* Begin PBXFileReference section */
 		296DB3F726A8592500BFDEA0 /* BrickLinkScripting */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BrickLinkScripting; sourceTree = BUILT_PRODUCTS_DIR; };
 		296DB3FA26A8592500BFDEA0 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		296DB40726A85CB300BFDEA0 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		296DB40B26A85CDF00BFDEA0 /* Auth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Auth.swift; sourceTree = "<group>"; };
+		296DB40E26A85D9000BFDEA0 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +66,9 @@
 			isa = PBXGroup;
 			children = (
 				296DB3FA26A8592500BFDEA0 /* main.swift */,
+				296DB40726A85CB300BFDEA0 /* Models.swift */,
+				296DB40B26A85CDF00BFDEA0 /* Auth.swift */,
+				296DB40E26A85D9000BFDEA0 /* Utils.swift */,
 			);
 			path = BrickLinkScripting;
 			sourceTree = "<group>";
@@ -128,6 +137,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				296DB3FB26A8592500BFDEA0 /* main.swift in Sources */,
+				296DB40F26A85D9000BFDEA0 /* Utils.swift in Sources */,
+				296DB40C26A85CDF00BFDEA0 /* Auth.swift in Sources */,
+				296DB40826A85CB300BFDEA0 /* Models.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
