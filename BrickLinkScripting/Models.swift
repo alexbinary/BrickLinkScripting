@@ -36,16 +36,20 @@ struct Inventory: Codable, Identifiable {
 
 
 
-struct InventoryItem: Codable, Hashable {
+struct InventoryItem: Codable, Hashable, CustomStringConvertible {
 
     
     let type: ItemType
     let no: String
+    
+    
+    var description: String { "\(type)#\(no)" }
 }
 
 
 
-enum ItemType: String, Codable {
+enum ItemType: String, Codable, CustomStringConvertible {
+    
     
     case part = "PART"
     case minifig = "MINIFIG"
@@ -53,6 +57,9 @@ enum ItemType: String, Codable {
     case set = "SET"
     case originalBox = "ORIGINAL_BOX"
     case gear = "GEAR"
+    
+    
+    var description: String { self.rawValue }
 }
 
 
@@ -105,17 +112,20 @@ enum PriceGuideQuality {
 
 
 
-struct PriceGuidePath: Hashable {
+struct PriceGuidePath: Hashable, CustomStringConvertible {
     
     
     let guideType: PriceGuideType
     let condition: ItemCondition
     let quality: PriceGuideQuality
+    
+    
+    var description: String { "PriceGuide(\(guideType), \(condition), \(quality))" }
 }
 
 
 
-struct FixedPointNumber: Codable, ExpressibleByFloatLiteral {
+struct FixedPointNumber: Codable, ExpressibleByFloatLiteral, CustomStringConvertible {
     
     
     typealias FloatLiteralType = Float
@@ -148,6 +158,9 @@ struct FixedPointNumber: Codable, ExpressibleByFloatLiteral {
         var container = encoder.singleValueContainer()
         try! container.encode(self.floatValue)
     }
+    
+    
+    var description: String { "\(floatValue)" }
 }
 
 

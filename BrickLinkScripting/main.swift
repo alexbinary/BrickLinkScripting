@@ -26,13 +26,15 @@ updatePriceOfAllInventories(toPriceGuide: PriceGuidePath(guideType: .stock, cond
 
 func updatePriceOfAllInventories(toPriceGuide priceGuidePath: PriceGuidePath, withMultiplier multiplier: Float) {
     
+    print("Updating price of all inventories")
+    
     getAllInventories { inventories in
         
         let iterator = inventories.makeIterator()
     
         updatePrice(ofAllRemainingInventoriesIn: iterator, toPriceGuide: priceGuidePath, withMultiplier: multiplier) {
     
-            print("Done")
+            print("Done updating price of all inventories")
         }
     }
 }
@@ -45,11 +47,8 @@ func updatePrice(ofAllRemainingInventoriesIn iterator: IndexingIterator<[Invento
     
     if let inventory = it.next() {
     
-        updatePrice(of: inventory, toPriceGuide: priceGuidePath, withMultiplier: multiplier) { updatedInventory in
+        updatePrice(of: inventory, toPriceGuide: priceGuidePath, withMultiplier: multiplier) { _ in
     
-            print(updatedInventory)
-            print(updatedInventory.unitPrice)
-            
             updatePrice(ofAllRemainingInventoriesIn: iterator, toPriceGuide: priceGuidePath, withMultiplier: multiplier, completion: completion)
         }
         
@@ -65,13 +64,9 @@ func updatePrice(ofInventoryWithId inventoryId: String, toPriceGuide priceGuideP
     
     getInventory(withId: inventoryId) { inventory in
 
-        print(inventory)
-        print(inventory.unitPrice)
-
         updatePrice(of: inventory, toPriceGuide: priceGuidePath, withMultiplier: multiplier) { updatedInventory in
 
-            print(updatedInventory)
-            print(updatedInventory.unitPrice)
+            completion(updatedInventory)
         }
     }
 }
@@ -80,20 +75,17 @@ func updatePrice(ofInventoryWithId inventoryId: String, toPriceGuide priceGuideP
 
 func updatePrice(of inventory: Inventory, toPriceGuide priceGuidePath: PriceGuidePath, withMultiplier multiplier: Float, completion: @escaping (Inventory) -> Void) {
     
+    print("Updating price of \(inventory.item) to \(priceGuidePath) x\(multiplier)")
+    print("Current price is \(inventory.unitPrice)")
+    
     getPriceGuide(for: inventory, guideType: priceGuidePath.guideType, condition: priceGuidePath.condition) { priceGuide in
-
-        print(priceGuide)
-        print(priceGuide.avgPrice)
 
         var modifiedInventory = inventory
         modifiedInventory.unitPrice = priceGuide.value(forQuality: priceGuidePath.quality) * multiplier
-        print(modifiedInventory.unitPrice)
 
         putInventory(modifiedInventory) { updatedInventory in
 
-            print(updatedInventory)
-            print(updatedInventory.unitPrice)
-            
+            print("New price is \(updatedInventory.unitPrice)")
             completion(updatedInventory)
         }
     }
@@ -108,6 +100,8 @@ func getPriceGuide(for inventory: Inventory, guideType: PriceGuideType, conditio
     let itemNo = item.no
     let colorId = inventory.colorId
     
+    print("Loading price guide for \(item) in color \(colorId), \(guideType) \(condition)")
+    
     if let priceGuide = priceGuideCache[item]?[guideType]?[condition] {
         
         print("Using price guide from cache")
@@ -116,9 +110,9 @@ func getPriceGuide(for inventory: Inventory, guideType: PriceGuideType, conditio
     }
     
     let url = URL(string: "https://api.bricklink.com/api/store/v1/items/\(itemType)/\(itemNo)/price?color_id=\(colorId)&guide_type=\(guideType)&new_or_used=\(condition.rawValue)&currency_code=EUR")!
-    print(url)
 
     var request = URLRequest(url: url)
+    print("\(request.httpMethod!) \(request.url!)")
 
     request.addAuthentication(using: credentials)
 
@@ -128,10 +122,7 @@ func getPriceGuide(for inventory: Inventory, guideType: PriceGuideType, conditio
         print(String(data: data, encoding: .utf8)!)
 
         let apiResponse: APIResponse<PriceGuide> = decodeAPIResponse(data)
-        print(apiResponse)
-
         let priceGuide = apiResponse.data
-        print(priceGuide)
         
         if priceGuideCache[item] == nil { priceGuideCache[item] = [:] }
         if priceGuideCache[item]![guideType] == nil { priceGuideCache[item]![guideType] = [:] }
@@ -147,9 +138,9 @@ func getPriceGuide(for inventory: Inventory, guideType: PriceGuideType, conditio
 func putInventory(_ inventory: Inventory, completion: @escaping (Inventory) -> Void) {
 
     let url = URL(string: "https://api.bricklink.com/api/store/v1/inventories/\(inventory.id)")!
-    print(url)
     
     var request = URLRequest(url: url)
+    print("\(request.httpMethod!) \(request.url!)")
     
     request.httpMethod = "PUT"
     request.httpBody = encodeForAPIRequest(inventory)
@@ -163,10 +154,7 @@ func putInventory(_ inventory: Inventory, completion: @escaping (Inventory) -> V
         print(String(data: data, encoding: .utf8)!)
 
         let apiResponse: APIResponse<Inventory> = decodeAPIResponse(data)
-        print(apiResponse)
-
         let inventory = apiResponse.data
-        print(inventory)
 
         completion(inventory)
     }
@@ -178,9 +166,9 @@ func putInventory(_ inventory: Inventory, completion: @escaping (Inventory) -> V
 func getInventory(withId: String, completion: @escaping (Inventory) -> Void) {
 
     let url = URL(string: "https://api.bricklink.com/api/store/v1/inventories/\(withId)")!
-    print(url)
     
     var request = URLRequest(url: url)
+    print("\(request.httpMethod!) \(request.url!)")
 
     request.addAuthentication(using: credentials)
 
@@ -190,10 +178,7 @@ func getInventory(withId: String, completion: @escaping (Inventory) -> Void) {
         print(String(data: data, encoding: .utf8)!)
 
         let apiResponse: APIResponse<Inventory> = decodeAPIResponse(data)
-        print(apiResponse)
-
         let inventory = apiResponse.data
-        print(inventory)
 
         completion(inventory)
     }
@@ -205,22 +190,19 @@ func getInventory(withId: String, completion: @escaping (Inventory) -> Void) {
 func getAllInventories(completion: @escaping ([Inventory]) -> Void) {
 
     let url = URL(string: "https://api.bricklink.com/api/store/v1/inventories")!
-    print(url)
     
     var request = URLRequest(url: url)
-
+    print("\(request.httpMethod!) \(request.url!)")
+    
     request.addAuthentication(using: credentials)
 
     URLSession(configuration: .default).dataTask(with: request) { (data, response, error) in
 
         guard let data = data else { fatalError("request data was nil") }
         print(String(data: data, encoding: .utf8)!.prefix(1024))
-
+        
         let apiResponse: APIResponse<[Inventory]> = decodeAPIResponse(data)
-//        print(apiResponse)
-
         let inventories = apiResponse.data
-//        print(inventories)
 
         completion(inventories)
     }
