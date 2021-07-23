@@ -6,7 +6,7 @@ import Foundation
 let credentials = BrickLinkCredentials()
 
 
-var priceGuideCache: [ItemType: [String: [Int: PriceGuide]]] = [:]
+var priceGuideCache: [InventoryItem: [PriceGuideType: [ItemCondition: PriceGuide]]] = [:]
 
 
 
@@ -103,11 +103,12 @@ func updatePrice(of inventory: Inventory, toPriceGuide priceGuidePath: PriceGuid
 
 func getPriceGuide(for inventory: Inventory, guideType: PriceGuideType, condition: ItemCondition, completion: @escaping (PriceGuide) -> Void) {
     
-    let itemType = inventory.item.type
-    let itemNo = inventory.item.no
+    let item = inventory.item
+    let itemType = item.type
+    let itemNo = item.no
     let colorId = inventory.colorId
     
-    if let priceGuide = priceGuideCache[itemType]?[itemNo]?[colorId] {
+    if let priceGuide = priceGuideCache[item]?[guideType]?[condition] {
         
         print("Using price guide from cache")
         completion(priceGuide)
@@ -132,9 +133,9 @@ func getPriceGuide(for inventory: Inventory, guideType: PriceGuideType, conditio
         let priceGuide = apiResponse.data
         print(priceGuide)
         
-        if priceGuideCache[itemType] == nil { priceGuideCache[itemType] = [:] }
-        if priceGuideCache[itemType]![itemNo] == nil { priceGuideCache[itemType]![itemNo] = [:] }
-        priceGuideCache[itemType]![itemNo]![colorId] = priceGuide
+        if priceGuideCache[item] == nil { priceGuideCache[item] = [:] }
+        if priceGuideCache[item]![guideType] == nil { priceGuideCache[item]![guideType] = [:] }
+        priceGuideCache[item]![guideType]![condition] = priceGuide
         
         completion(priceGuide)
     }

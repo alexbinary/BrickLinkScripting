@@ -36,7 +36,7 @@ struct Inventory: Codable, Identifiable {
 
 
 
-struct InventoryItem: Codable {
+struct InventoryItem: Codable, Hashable {
 
     
     let type: ItemType
@@ -105,7 +105,7 @@ enum PriceGuideQuality {
 
 
 
-struct PriceGuidePath {
+struct PriceGuidePath: Hashable {
     
     
     let guideType: PriceGuideType
