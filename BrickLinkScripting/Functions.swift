@@ -3,32 +3,35 @@ import Foundation
 
 
 
-func updatePriceOfAllInventories(toPriceGuide priceGuidePath: PriceGuidePath, withMultiplier multiplier: Float) {
+func updatePriceOfAllInventories(toPriceGuide priceGuidePath: PriceGuidePath, withMultiplier multiplier: Float, completion: @escaping () -> Void) {
     
     print("Updating price of all inventories")
+    print("Loading all inventories")
     
     getAllInventories { inventories in
         
-        let iterator = inventories.makeIterator()
-    
-        updatePrice(ofAllRemainingInventoriesIn: iterator, toPriceGuide: priceGuidePath, withMultiplier: multiplier) {
+        print("\(inventories.count) inventories to update")
+        
+        updatePrice(ofAllInventoriesIn: inventories.reversed(), toPriceGuide: priceGuidePath, withMultiplier: multiplier) {
     
             print("Done updating price of all inventories")
+            completion()
         }
     }
 }
 
 
 
-func updatePrice(ofAllRemainingInventoriesIn iterator: IndexingIterator<[Inventory]>, toPriceGuide priceGuidePath: PriceGuidePath, withMultiplier multiplier: Float, completion: @escaping () -> Void) {
+func updatePrice(ofAllInventoriesIn inventories: [Inventory], toPriceGuide priceGuidePath: PriceGuidePath, withMultiplier multiplier: Float, completion: @escaping () -> Void) {
 
-    var it = iterator
+    print("\(inventories.count) inventories remaining")
     
-    if let inventory = it.next() {
+    var reducedInventories = inventories
+    if let inventory = reducedInventories.popLast() {
     
         updatePrice(of: inventory, toPriceGuide: priceGuidePath, withMultiplier: multiplier) { _ in
     
-            updatePrice(ofAllRemainingInventoriesIn: it, toPriceGuide: priceGuidePath, withMultiplier: multiplier, completion: completion)
+            updatePrice(ofAllInventoriesIn: reducedInventories, toPriceGuide: priceGuidePath, withMultiplier: multiplier, completion: completion)
         }
         
     } else {
