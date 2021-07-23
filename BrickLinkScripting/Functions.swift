@@ -83,8 +83,16 @@ func updatePrice(of inventory: Inventory, toPriceGuide priceGuidePath: PriceGuid
         
         print(priceGuide)
 
+        let newPrice = priceGuide.value(forQuality: priceGuidePath.quality) * multiplier
+        guard newPrice.floatValue != 0 else {
+            
+            print("No price data, inventory not updated")
+            completion(inventory)
+            return
+        }
+        
         var modifiedInventory = inventory
-        modifiedInventory.unitPrice = priceGuide.value(forQuality: priceGuidePath.quality) * multiplier
+        modifiedInventory.unitPrice = newPrice
 
         putInventory(modifiedInventory) { updatedInventory in
 
