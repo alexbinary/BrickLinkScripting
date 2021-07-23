@@ -26,7 +26,7 @@ var priceGuideCache: [ItemType: [String: [Int: PriceGuide]]] = [:]
 
 
 
-updatePrice(ofInventoryWithId: "255534269", toGuideType: .stock, forCondition: .used, usingValue: .avg, withMultiplier: 1.1) { updatedInventory in
+updatePrice(ofInventoryWithId: "255534269", toPriceGuide: PriceGuidePath(guideType: .stock, condition: .used, quality: .avg), withMultiplier: 1.1) { updatedInventory in
 
     print(updatedInventory)
     print(updatedInventory.unitPrice)
@@ -34,14 +34,14 @@ updatePrice(ofInventoryWithId: "255534269", toGuideType: .stock, forCondition: .
 
 
 
-func updatePrice(ofInventoryWithId inventoryId: String, toGuideType guideType: PriceGuideType, forCondition condition: ItemCondition, usingValue priceGuideValue: PriceGuideValue, withMultiplier multiplier: Float, completion: @escaping (Inventory) -> Void) {
+func updatePrice(ofInventoryWithId inventoryId: String, toPriceGuide priceGuidePath: PriceGuidePath, withMultiplier multiplier: Float, completion: @escaping (Inventory) -> Void) {
     
     getInventory(withId: inventoryId) { inventory in
 
         print(inventory)
         print(inventory.unitPrice)
 
-        updatePrice(of: inventory, toGuideType: guideType, forCondition: condition, usingValue: priceGuideValue, withMultiplier: multiplier) { updatedInventory in
+        updatePrice(of: inventory, toPriceGuide: priceGuidePath, withMultiplier: multiplier) { updatedInventory in
 
             print(updatedInventory)
             print(updatedInventory.unitPrice)
@@ -51,15 +51,15 @@ func updatePrice(ofInventoryWithId inventoryId: String, toGuideType guideType: P
 
 
 
-func updatePrice(of inventory: Inventory, toGuideType guideType: PriceGuideType, forCondition condition: ItemCondition, usingValue priceGuideValue: PriceGuideValue, withMultiplier multiplier: Float, completion: @escaping (Inventory) -> Void) {
+func updatePrice(of inventory: Inventory, toPriceGuide priceGuidePath: PriceGuidePath, withMultiplier multiplier: Float, completion: @escaping (Inventory) -> Void) {
     
-    getPriceGuide(for: inventory, guideType: guideType, condition: condition) { priceGuide in
+    getPriceGuide(for: inventory, guideType: priceGuidePath.guideType, condition: priceGuidePath.condition) { priceGuide in
 
         print(priceGuide)
         print(priceGuide.avgPrice)
 
         var modifiedInventory = inventory
-        modifiedInventory.unitPrice = priceGuide.value(of: priceGuideValue) * multiplier
+        modifiedInventory.unitPrice = priceGuide.value(forQuality: priceGuidePath.quality) * multiplier
         print(modifiedInventory.unitPrice)
 
         putInventory(modifiedInventory) { updatedInventory in

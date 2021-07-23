@@ -74,9 +74,9 @@ struct PriceGuide: Decodable {
     let avgPrice: FixedPointNumber
     
     
-    func value(of v: PriceGuideValue) -> FixedPointNumber {
+    func value(forQuality quality: PriceGuideQuality) -> FixedPointNumber {
         
-        switch v {
+        switch quality {
         case .min: return self.minPrice
         case .max: return self.maxPrice
         case .avg: return self.avgPrice
@@ -95,12 +95,22 @@ enum PriceGuideType: String {
 
 
 
-enum PriceGuideValue {
+enum PriceGuideQuality {
     
     
     case min
     case max
     case avg
+}
+
+
+
+struct PriceGuidePath {
+    
+    
+    let guideType: PriceGuideType
+    let condition: ItemCondition
+    let quality: PriceGuideQuality
 }
 
 
