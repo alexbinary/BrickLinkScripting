@@ -79,6 +79,8 @@ func updatePrice(of inventory: Inventory, toPriceGuide priceGuidePath: PriceGuid
     print("Current price is \(inventory.unitPrice)")
     
     getPriceGuide(for: inventory, guideType: priceGuidePath.guideType, condition: priceGuidePath.condition) { priceGuide in
+        
+        print(priceGuide)
 
         var modifiedInventory = inventory
         modifiedInventory.unitPrice = priceGuide.value(forQuality: priceGuidePath.quality) * multiplier
@@ -140,11 +142,12 @@ func putInventory(_ inventory: Inventory, completion: @escaping (Inventory) -> V
     let url = URL(string: "https://api.bricklink.com/api/store/v1/inventories/\(inventory.id)")!
     
     var request = URLRequest(url: url)
-    print("\(request.httpMethod!) \(request.url!)")
     
     request.httpMethod = "PUT"
     request.httpBody = encodeForAPIRequest(inventory)
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    
+    print("\(request.httpMethod!) \(request.url!)")
 
     request.addAuthentication(using: credentials)
 
