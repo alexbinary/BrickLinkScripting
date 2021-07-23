@@ -83,13 +83,6 @@ func getPriceGuide(for inventory: Inventory, guideType: PriceGuideType, conditio
     
     print("Loading price guide for \(item) in color \(colorId), \(guideType) \(condition)")
     
-    if let priceGuide = priceGuideCache[item]?[guideType]?[condition] {
-        
-        print("Using price guide from cache")
-        completion(priceGuide)
-        return
-    }
-    
     let url = URL(string: "https://api.bricklink.com/api/store/v1/items/\(itemType)/\(itemNo)/price?color_id=\(colorId)&guide_type=\(guideType)&new_or_used=\(condition.rawValue)&currency_code=EUR")!
 
     var request = URLRequest(url: url)
@@ -104,10 +97,6 @@ func getPriceGuide(for inventory: Inventory, guideType: PriceGuideType, conditio
 
         let apiResponse: APIResponse<PriceGuide> = decodeAPIResponse(data)
         let priceGuide = apiResponse.data
-        
-        if priceGuideCache[item] == nil { priceGuideCache[item] = [:] }
-        if priceGuideCache[item]![guideType] == nil { priceGuideCache[item]![guideType] = [:] }
-        priceGuideCache[item]![guideType]![condition] = priceGuide
         
         completion(priceGuide)
     }
