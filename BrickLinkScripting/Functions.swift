@@ -3,7 +3,13 @@ import Foundation
 
 
 
+var durations: [TimeInterval] = []
+
+
+
 func updatePriceOfAllInventories(toPriceGuide priceGuidePath: PriceGuidePath, withMultiplier multiplier: Float, completion: @escaping () -> Void) {
+    
+    durations = []
     
     print("Updating price of all inventories")
     print("Loading all inventories")
@@ -29,7 +35,15 @@ func updatePrice(ofAllInventoriesIn inventories: [Inventory], toPriceGuide price
     var reducedInventories = inventories
     if let inventory = reducedInventories.popLast() {
     
+        let startTime = Date()
+        
         updatePrice(of: inventory, toPriceGuide: priceGuidePath, withMultiplier: multiplier) { _ in
+            
+            let endTime = Date()
+            let duration = startTime.distance(to: endTime)
+            
+            durations.append(duration)
+            print("\(NSString(format:"%.2f", duration))s")
     
             updatePrice(ofAllInventoriesIn: reducedInventories, toPriceGuide: priceGuidePath, withMultiplier: multiplier, completion: completion)
         }
