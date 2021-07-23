@@ -3,7 +3,7 @@ import Foundation
 
 
 
-let credentials = BrickLinkCredentials()
+let credentials = Credentials()
 
 
 

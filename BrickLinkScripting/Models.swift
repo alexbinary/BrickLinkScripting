@@ -3,18 +3,6 @@ import Foundation
 
 
 
-struct BrickLinkCredentials {
-
-    
-    let consumerKey: String = "5384025985CF43F391463885E5B033C6"
-    let consumerSecret: String = "98FBCE8EF6DA4171BDF2DC5999B784C8"
-    
-    let tokenValue: String = "13353D8AF9874BF1858064FD9454CDBF"
-    let tokenSecret: String = "1128A4EFCBCF46918E2AE818E26D5102"
-}
-
-
-
 struct APIResponse<T>: Decodable where T: Decodable {
     
     
