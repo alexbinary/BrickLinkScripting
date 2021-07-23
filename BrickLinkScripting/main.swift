@@ -49,7 +49,7 @@ func updatePrice(ofAllRemainingInventoriesIn iterator: IndexingIterator<[Invento
     
         updatePrice(of: inventory, toPriceGuide: priceGuidePath, withMultiplier: multiplier) { _ in
     
-            updatePrice(ofAllRemainingInventoriesIn: iterator, toPriceGuide: priceGuidePath, withMultiplier: multiplier, completion: completion)
+            updatePrice(ofAllRemainingInventoriesIn: it, toPriceGuide: priceGuidePath, withMultiplier: multiplier, completion: completion)
         }
         
     } else {
