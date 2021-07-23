@@ -9,27 +9,36 @@ let credentials = BrickLinkCredentials()
 var priceGuideCache: [ItemType: [String: [Int: PriceGuide]]] = [:]
 
 
-//getAllInventories { inventories in
+
+
+
+updatePriceOfAllInventories(toPriceGuide: PriceGuidePath(guideType: .stock, condition: .used, quality: .avg), withMultiplier: 1.1)
+
+
+
+//updatePrice(ofInventoryWithId: "255534269", toPriceGuide: PriceGuidePath(guideType: .stock, condition: .used, quality: .avg), withMultiplier: 1.1) { updatedInventory in
 //
-//    let inventory = inventories.first!
-//
-//    print(inventory)
-//    print(inventory.unitPrice)
-//
-//    updatePrice(for: inventory) { updatedInventory in
-//
-//        print(updatedInventory)
-//        print(updatedInventory.unitPrice)
-//    }
+//    print(updatedInventory)
+//    print(updatedInventory.unitPrice)
 //}
 
 
 
-
-updatePrice(ofInventoryWithId: "255534269", toPriceGuide: PriceGuidePath(guideType: .stock, condition: .used, quality: .avg), withMultiplier: 1.1) { updatedInventory in
-
-    print(updatedInventory)
-    print(updatedInventory.unitPrice)
+func updatePriceOfAllInventories(toPriceGuide priceGuidePath: PriceGuidePath, withMultiplier multiplier: Float) {
+    
+    getAllInventories { inventories in
+    
+        inventories.forEach { inventory in
+            
+            print(inventory)
+        
+            updatePrice(of: inventory, toPriceGuide: priceGuidePath, withMultiplier: multiplier) { updatedInventory in
+        
+                print(updatedInventory)
+                print(updatedInventory.unitPrice)
+            }
+        }
+    }
 }
 
 
