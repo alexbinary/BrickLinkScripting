@@ -44,6 +44,11 @@ func updatePrice(ofAllInventoriesIn inventories: [Inventory], toPriceGuide price
             
             durations.append(duration)
             print("\(NSString(format:"%.2f", duration))s")
+            
+            let avgDuration = durations.reduce(TimeInterval(0), +) / Double(durations.count)
+            let estimatedTotalRemainingDuration = avgDuration * Double(inventories.count-1)
+            
+            print("ETA \(format(estimatedTotalRemainingDuration))")
     
             updatePrice(ofAllInventoriesIn: reducedInventories, toPriceGuide: priceGuidePath, withMultiplier: multiplier, completion: completion)
         }
