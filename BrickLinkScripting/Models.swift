@@ -57,10 +57,50 @@ enum ItemType: String, Codable {
 
 
 
+enum ItemCondition: String, Codable {
+    
+    
+    case new = "N"
+    case used = "U"
+}
+
+
+
 struct PriceGuide: Decodable {
 
     
+    let minPrice: FixedPointNumber
+    let maxPrice: FixedPointNumber
     let avgPrice: FixedPointNumber
+    
+    
+    func value(of v: PriceGuideValue) -> FixedPointNumber {
+        
+        switch v {
+        case .min: return self.minPrice
+        case .max: return self.maxPrice
+        case .avg: return self.avgPrice
+        }
+    }
+}
+
+
+
+enum PriceGuideType: String {
+    
+    
+    case sold = "sold"
+    case stock = "stock"
+}
+
+
+
+enum PriceGuideValue {
+    
+    
+    case min
+    case max
+    case avg
 }
 
 
@@ -98,4 +138,10 @@ struct FixedPointNumber: Codable, ExpressibleByFloatLiteral {
         var container = encoder.singleValueContainer()
         try! container.encode(self.floatValue)
     }
+}
+
+
+func *(lhs: FixedPointNumber, rhs: Float) -> FixedPointNumber {
+    
+    return FixedPointNumber(lhs.floatValue * rhs)
 }

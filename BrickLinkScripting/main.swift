@@ -11,35 +11,70 @@ var priceGuideCache: [ItemType: [String: [Int: PriceGuide]]] = [:]
 
 //getAllInventories { inventories in
 //
-//    print(inventories.first)
+//    let inventory = inventories.first!
+//
+//    print(inventory)
+//    print(inventory.unitPrice)
+//
+//    updatePrice(for: inventory) { updatedInventory in
+//
+//        print(updatedInventory)
+//        print(updatedInventory.unitPrice)
+//    }
 //}
 
 
-getInventory(inventoryId: "255532210") { inventory in
 
-    print(inventory)
-    print(inventory.unitPrice)
 
-    getPriceGuide(for: inventory) { priceGuide in
+updatePrice(ofInventoryWithId: "255534269", toGuideType: .stock, forCondition: .used, usingValue: .avg, withMultiplier: 1.1) { updatedInventory in
 
-        print(priceGuide)
-        print(priceGuide.avgPrice)
-//
-//        var modifiedInventory = inventory
-//        modifiedInventory.unitPrice = priceGuide.avgPrice
-//        print(modifiedInventory.unitPrice)
-//
-//        putInventory(modifiedInventory) { updatedInventory in
-//
-//            print(updatedInventory)
-//            print(updatedInventory.unitPrice)
-//        }
+    print(updatedInventory)
+    print(updatedInventory.unitPrice)
+}
+
+
+
+func updatePrice(ofInventoryWithId inventoryId: String, toGuideType guideType: PriceGuideType, forCondition condition: ItemCondition, usingValue priceGuideValue: PriceGuideValue, withMultiplier multiplier: Float, completion: @escaping (Inventory) -> Void) {
+    
+    getInventory(withId: inventoryId) { inventory in
+
+        print(inventory)
+        print(inventory.unitPrice)
+
+        updatePrice(of: inventory, toGuideType: guideType, forCondition: condition, usingValue: priceGuideValue, withMultiplier: multiplier) { updatedInventory in
+
+            print(updatedInventory)
+            print(updatedInventory.unitPrice)
+        }
     }
 }
 
 
 
-func getPriceGuide(for inventory: Inventory, completion: @escaping (PriceGuide) -> Void) {
+func updatePrice(of inventory: Inventory, toGuideType guideType: PriceGuideType, forCondition condition: ItemCondition, usingValue priceGuideValue: PriceGuideValue, withMultiplier multiplier: Float, completion: @escaping (Inventory) -> Void) {
+    
+    getPriceGuide(for: inventory, guideType: guideType, condition: condition) { priceGuide in
+
+        print(priceGuide)
+        print(priceGuide.avgPrice)
+
+        var modifiedInventory = inventory
+        modifiedInventory.unitPrice = priceGuide.value(of: priceGuideValue) * multiplier
+        print(modifiedInventory.unitPrice)
+
+        putInventory(modifiedInventory) { updatedInventory in
+
+            print(updatedInventory)
+            print(updatedInventory.unitPrice)
+            
+            completion(updatedInventory)
+        }
+    }
+}
+
+
+
+func getPriceGuide(for inventory: Inventory, guideType: PriceGuideType, condition: ItemCondition, completion: @escaping (PriceGuide) -> Void) {
     
     let itemType = inventory.item.type
     let itemNo = inventory.item.no
@@ -52,7 +87,7 @@ func getPriceGuide(for inventory: Inventory, completion: @escaping (PriceGuide) 
         return
     }
     
-    let url = URL(string: "https://api.bricklink.com/api/store/v1/items/\(itemType)/\(itemNo)/price?color_id=\(colorId)&guide_type=sold&new_or_used=U&currency_code=EUR")!
+    let url = URL(string: "https://api.bricklink.com/api/store/v1/items/\(itemType)/\(itemNo)/price?color_id=\(colorId)&guide_type=\(guideType)&new_or_used=\(condition.rawValue)&currency_code=EUR")!
     print(url)
 
     var request = URLRequest(url: url)
@@ -112,9 +147,9 @@ func putInventory(_ inventory: Inventory, completion: @escaping (Inventory) -> V
 
 
 
-func getInventory(inventoryId: String, completion: @escaping (Inventory) -> Void) {
+func getInventory(withId: String, completion: @escaping (Inventory) -> Void) {
 
-    let url = URL(string: "https://api.bricklink.com/api/store/v1/inventories/\(inventoryId)")!
+    let url = URL(string: "https://api.bricklink.com/api/store/v1/inventories/\(withId)")!
     print(url)
     
     var request = URLRequest(url: url)
