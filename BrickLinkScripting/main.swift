@@ -27,17 +27,35 @@ updatePriceOfAllInventories(toPriceGuide: PriceGuidePath(guideType: .stock, cond
 func updatePriceOfAllInventories(toPriceGuide priceGuidePath: PriceGuidePath, withMultiplier multiplier: Float) {
     
     getAllInventories { inventories in
+        
+        let iterator = inventories.makeIterator()
     
-        inventories.forEach { inventory in
-            
-            print(inventory)
-        
-            updatePrice(of: inventory, toPriceGuide: priceGuidePath, withMultiplier: multiplier) { updatedInventory in
-        
-                print(updatedInventory)
-                print(updatedInventory.unitPrice)
-            }
+        updatePrice(ofAllRemainingInventoriesIn: iterator, toPriceGuide: priceGuidePath, withMultiplier: multiplier) {
+    
+            print("Done")
         }
+    }
+}
+
+
+
+func updatePrice(ofAllRemainingInventoriesIn iterator: IndexingIterator<[Inventory]>, toPriceGuide priceGuidePath: PriceGuidePath, withMultiplier multiplier: Float, completion: @escaping () -> Void) {
+
+    var it = iterator
+    
+    if let inventory = it.next() {
+    
+        updatePrice(of: inventory, toPriceGuide: priceGuidePath, withMultiplier: multiplier) { updatedInventory in
+    
+            print(updatedInventory)
+            print(updatedInventory.unitPrice)
+            
+            updatePrice(ofAllRemainingInventoriesIn: iterator, toPriceGuide: priceGuidePath, withMultiplier: multiplier, completion: completion)
+        }
+        
+    } else {
+        
+        completion()
     }
 }
 
