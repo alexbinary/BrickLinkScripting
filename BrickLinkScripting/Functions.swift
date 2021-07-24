@@ -7,14 +7,14 @@ var durations: [TimeInterval] = []
 
 
 
-func updatePriceOfAllInventories(toPriceGuide priceGuidePath: PriceGuidePath, withMultiplier multiplier: Float, completion: @escaping () -> Void) {
+func updatePriceOfAllInventories(withTypes itemTypes: [ItemType] = [], toPriceGuide priceGuidePath: PriceGuidePath, withMultiplier multiplier: Float, completion: @escaping () -> Void) {
     
     durations = []
     
     print("Updating price of all inventories")
     print("Loading all inventories")
     
-    getAllInventories { inventories in
+    getAllInventories(withTypes: itemTypes) { inventories in
         
         print("\(inventories.count) inventories to update")
         
@@ -188,9 +188,16 @@ func getInventory(withId: String, completion: @escaping (Inventory) -> Void) {
 
 
 
-func getAllInventories(completion: @escaping ([Inventory]) -> Void) {
+func getAllInventories(withTypes itemTypes: [ItemType] = [], completion: @escaping ([Inventory]) -> Void) {
 
-    let url = URL(string: "https://api.bricklink.com/api/store/v1/inventories")!
+    var url = URL(string: "https://api.bricklink.com/api/store/v1/inventories")!
+    
+    if !itemTypes.isEmpty {
+        
+        var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
+        components!.queryItems = [URLQueryItem(name: "item_type", value: itemTypes.map { $0.rawValue } .joined(separator: ","))]
+        url = components!.url!
+    }
     
     var request = URLRequest(url: url)
     print("\(request.httpMethod!) \(request.url!)")

@@ -7,7 +7,7 @@ let credentials = Credentials()
 
 
 
-updatePriceOfAllInventories(toPriceGuide: PriceGuidePath(guideType: .stock, condition: .used, quality: .avg), withMultiplier: 1.1) {}
+updatePriceOfAllInventories(withTypes: [.part, .minifig], toPriceGuide: PriceGuidePath(guideType: .stock, condition: .new, quality: .avg), withMultiplier: 1) {}
 
     
 
