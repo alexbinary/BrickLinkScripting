@@ -7,7 +7,7 @@ var durations: [TimeInterval] = []
 
 
 
-func updatePriceOfAllInventories(withTypes itemTypes: [ItemType] = [], toPriceGuide priceGuidePath: PriceGuidePath, withMultiplier multiplier: Float, completion: @escaping () -> Void) {
+func updatePriceOfAllInventories(withTypes itemTypes: [ItemType] = [], filter: @escaping (Inventory) -> Bool, toPriceGuide priceGuidePath: PriceGuidePath, withMultiplier multiplier: Float, completion: @escaping () -> Void) {
     
     durations = []
     
@@ -16,9 +16,11 @@ func updatePriceOfAllInventories(withTypes itemTypes: [ItemType] = [], toPriceGu
     
     getAllInventories(withTypes: itemTypes) { inventories in
         
-        print("\(inventories.count) inventories to update")
+        let filteredInventories = inventories.filter(filter)
         
-        updatePrice(ofAllInventoriesIn: inventories.reversed(), toPriceGuide: priceGuidePath, withMultiplier: multiplier) {
+        print("\(filteredInventories.count) inventories to update")
+        
+        updatePrice(ofAllInventoriesIn: filteredInventories.reversed(), toPriceGuide: priceGuidePath, withMultiplier: multiplier) {
     
             print("Done updating price of all inventories")
             completion()
