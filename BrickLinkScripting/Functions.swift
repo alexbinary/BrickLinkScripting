@@ -7,7 +7,7 @@ var durations: [TimeInterval] = []
 
 
 
-func updatePriceOfAllInventories(withTypes itemTypes: [ItemType] = [], filter: @escaping (Inventory) -> Bool, toPriceGuide priceGuidePath: PriceGuidePath, withMultiplier multiplier: Float, completion: @escaping () -> Void) {
+func updatePriceOfAllInventories(withTypes itemTypes: [ItemType] = [], filter: @escaping (Inventory) -> Bool = { _ in true }, toPriceGuide priceGuidePath: PriceGuidePath, withMultiplier multiplier: Float, completion: @escaping () -> Void) {
     
     durations = []
     
