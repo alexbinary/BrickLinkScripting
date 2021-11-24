@@ -93,6 +93,13 @@ func updatePrice(of inventory: Inventory, toPriceGuide priceGuidePath: PriceGuid
             return
         }
         
+        guard newPrice.floatValue > inventory.unitPrice.floatValue else {
+            
+            print("Price guide value lower than current value, inventory not updated")
+            completion(inventory)
+            return
+        }
+        
         var modifiedInventory = inventory
         modifiedInventory.unitPrice = newPrice
 
