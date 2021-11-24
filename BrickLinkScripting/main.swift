@@ -9,9 +9,8 @@ let credentials = Credentials()
 
 updatePriceOfAllInventories(
     withTypes: [.part],
-    filter: { ($0.remarks ?? "").isEmpty },
     toPriceGuide: PriceGuidePath(guideType: .stock, condition: .new, quality: .avg),
-    withMultiplier: 2,
+    withMultiplier: 3,
     completion: {}
 )
 
