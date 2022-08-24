@@ -21,6 +21,7 @@ struct Inventory: Codable, Identifiable {
     let colorId: Int
     var unitPrice: FixedPointNumber
     let remarks: String?
+    let dateCreated: String
 }
 
 
