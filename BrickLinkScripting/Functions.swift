@@ -101,7 +101,9 @@ func updatePrice(of inventory: Inventory, toPriceGuide priceGuidePath: PriceGuid
 //        }
         
         var modifiedInventory = inventory
-        modifiedInventory.unitPrice = newPrice
+        modifiedInventory.unitPrice = FixedPointNumber(Float(Int(newPrice.floatValue * 1000))/1000)
+        
+        print("Updating price to \(modifiedInventory.unitPrice)")
 
         putInventory(modifiedInventory) { updatedInventory in
 
