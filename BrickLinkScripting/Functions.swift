@@ -116,11 +116,53 @@ func updatePrice(of inventory: Inventory, toPriceGuide priceGuidePath: PriceGuid
 
 
 func getPriceGuide(for inventory: Inventory, guideType: PriceGuideType, condition: ItemCondition, completion: @escaping (PriceGuide) -> Void) {
-    
+
     let item = inventory.item
     let itemType = item.type
     let itemNo = item.no
     let colorId = inventory.colorId
+    
+    print("Checking cache for price guide for \(item) in color \(colorId), \(guideType) \(condition)")
+
+    if let cacheResult = db.runForSingleValueResult("""
+        SELECT avg_price FROM price_guide WHERE
+            item_type = :item_type
+        AND item_no = :item_no
+        AND color_id = :color_id
+        AND sold_or_stock = :sold_or_stock
+        AND new_or_used = :new_or_used
+        ORDER BY date DESC LIMIT 1
+        """, with: [
+            "item_type": itemType.rawValue,
+            "item_no": itemNo,
+            "color_id": "\(colorId)",
+            "sold_or_stock": guideType.rawValue,
+            "new_or_used": condition.databaseValue,
+        ]
+    ) {
+        switch cacheResult {
+        
+        case .null:
+            
+            print("Cache MISS for price guide for \(item) in color \(colorId), \(guideType) \(condition)")
+            
+        case .value(let priceString):
+            
+            print("Cache HIT for price guide for \(item) in color \(colorId), \(guideType) \(condition): \(priceString)")
+            
+            if let priceFloat = Float(priceString) {
+            
+                completion(PriceGuide(minPrice: FixedPointNumber(0.0), maxPrice: FixedPointNumber(0.0), avgPrice: FixedPointNumber(priceFloat)))
+                return
+                
+            } else {
+                print("Failed to parse price: \(priceString)")
+            }
+        }
+    } else {
+        
+        print("Cache MISS for price guide for \(item) in color \(colorId), \(guideType) \(condition) (no data)")
+    }
     
     print("Loading price guide for \(item) in color \(colorId), \(guideType) \(condition)")
     
@@ -140,6 +182,39 @@ func getPriceGuide(for inventory: Inventory, guideType: PriceGuideType, conditio
         let priceGuide = apiResponse.data
         
         completion(priceGuide)
+        
+        print("Caching price guide for \(item) in color \(colorId), \(guideType) \(condition)")
+        
+        let dateFormatter = ISO8601DateFormatter()
+        
+        db.runIgnoringResult("""
+            INSERT INTO price_guide(
+                item_type,
+                item_no,
+                color_id,
+                sold_or_stock,
+                new_or_used,
+                date,
+                avg_price
+            ) VALUES(
+                :item_type,
+                :item_no,
+                :color_id,
+                :sold_or_stock,
+                :new_or_used,
+                :date,
+                :avg_price
+            )
+            """, with: [
+                "item_type": itemType.rawValue,
+                "item_no": itemNo,
+                "color_id": "\(colorId)",
+                "sold_or_stock": guideType.rawValue,
+                "new_or_used": condition.databaseValue,
+                "date": dateFormatter.string(from: Date()),
+                "avg_price": "\(priceGuide.avgPrice)",
+            ]
+        )
     }
     .resume()
 }

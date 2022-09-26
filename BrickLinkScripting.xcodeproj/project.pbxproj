@@ -14,6 +14,7 @@
 		296DB40826A85CB300BFDEA0 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296DB40726A85CB300BFDEA0 /* Models.swift */; };
 		296DB40C26A85CDF00BFDEA0 /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296DB40B26A85CDF00BFDEA0 /* Auth.swift */; };
 		296DB40F26A85D9000BFDEA0 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296DB40E26A85D9000BFDEA0 /* Utils.swift */; };
+		2986FEDF28E206C50021F4B8 /* DatabaseConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2986FEDE28E206C50021F4B8 /* DatabaseConnection.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -36,6 +37,7 @@
 		296DB40726A85CB300BFDEA0 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		296DB40B26A85CDF00BFDEA0 /* Auth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Auth.swift; sourceTree = "<group>"; };
 		296DB40E26A85D9000BFDEA0 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		2986FEDE28E206C50021F4B8 /* DatabaseConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseConnection.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +77,7 @@
 				296DB40E26A85D9000BFDEA0 /* Utils.swift */,
 				2915E1C026AB1B3D0081CA1D /* Functions.swift */,
 				2957B67126AB643B00231901 /* Credentials.swift */,
+				2986FEDE28E206C50021F4B8 /* DatabaseConnection.swift */,
 			);
 			path = BrickLinkScripting;
 			sourceTree = "<group>";
@@ -143,6 +146,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2957B67226AB643B00231901 /* Credentials.swift in Sources */,
+				2986FEDF28E206C50021F4B8 /* DatabaseConnection.swift in Sources */,
 				296DB3FB26A8592500BFDEA0 /* main.swift in Sources */,
 				296DB40F26A85D9000BFDEA0 /* Utils.swift in Sources */,
 				296DB40C26A85CDF00BFDEA0 /* Auth.swift in Sources */,
