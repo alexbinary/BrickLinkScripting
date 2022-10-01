@@ -63,19 +63,6 @@ func updatePrice(ofAllInventoriesIn inventories: [Inventory], toPriceGuide price
 
 
 
-func updatePrice(ofInventoryWithId inventoryId: String, toPriceGuide priceGuidePath: PriceGuidePath, withMultiplier multiplier: Float, completion: @escaping (Inventory) -> Void) {
-    
-    getInventory(withId: inventoryId) { inventory in
-
-        updatePrice(of: inventory, toPriceGuide: priceGuidePath, withMultiplier: multiplier) { updatedInventory in
-
-            completion(updatedInventory)
-        }
-    }
-}
-
-
-
 func updatePrice(of inventory: Inventory, toPriceGuide priceGuidePath: PriceGuidePath, withMultiplier multiplier: Float, completion: @escaping (Inventory) -> Void) {
     
     print("Updating price of \(inventory.item) to \(priceGuidePath) x\(multiplier)")
